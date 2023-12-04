@@ -1,0 +1,26 @@
+// create angular component
+ng generate component component-test
+
+// create angular class
+ng generate class component-name/ClassName
+
+
+// iterate over a list in HTML component, creates a table row (tr) for each item
+...
+<tr *ngFor="let i of customList">
+	<td>{{ i.name }}</td>
+	<td>{{ i.id }}</td>
+	<td>{{ i.isTest }}</td>
+	...
+</tr>
+
+
+//if conditional in html component
+<!-- checks if person has met the sales quota -->
+<div *ngIf="i.salesVolume >= 300; else elseBlock">Yes</div>
+<ng-template #elseBlock>No</ng-template>
+
+
+// data formatting: pipes
+<p>Cost {{ value | currency: 'GBP' }} </p>
+

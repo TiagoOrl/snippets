@@ -1,4 +1,8 @@
 
+// login
+(host) SUDO mysql -u root -p -h localhost -P 3306
+(docker) mysql -u root -p
+
 
 // mudar banco de dados
 use database_name;

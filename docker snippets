@@ -6,7 +6,7 @@ Set Up:
 
 
 argumentos:
--p: mapear porta do docker para a porta da maquina local (8450:2000)
+-p: mapear porta do docker para a porta da maquina local (porta_docker:porta_local)
 -e: especificar uma variavel de ambiente (VAR_1=abc)
 --cpuset-cpus="0-2": limitar nucleos de cpu para o container
 
