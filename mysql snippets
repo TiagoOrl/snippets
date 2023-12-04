@@ -1,0 +1,27 @@
+
+
+// mudar banco de dados
+use database_name;
+
+// inserir em uma table
+INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)
+VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+
+// mostrar schema de uma table
+describe table_name;
+
+// mostrar banco de dados:
+SHOW DATABASES;
+
+// mostrar todas as tabelas
+SHOW TABLES;
+
+// atualizar um grupo de registros dentro de um "range"
+update Characters set UserId = 1 where Id between 2 and 4;
+
+
+// listar usuarios de um banco de dados:
+	SELECT user FROM user;  
+	
+// rodar um sql script do cli do mysql:
+	source \home\user\Desktop\test.sql;

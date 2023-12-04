@@ -1,0 +1,11 @@
+
+
+To set breakpoints, type "break/b [filename]:[linenumber]
+
+step in: step/s
+continue: continue/c
+
+
+	Check registers
+info registers
+info registers eax
