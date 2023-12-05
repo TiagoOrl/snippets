@@ -1,0 +1,4 @@
+// postgres client
+
+// login user
+	psql -U postgres -h localhost

@@ -1,6 +1,10 @@
 
 // login
-(host) SUDO mysql -u root -p -h localhost -P 3306
+(host) 
+	sudo mysql -u root -p -h 127.0.0.1 -P 7005 --protocol=tcp   (não usar localhost!!)
+*após criar o usuário "tiago":
+	mysql -u tiago -p -h 127.0.0.1 -P 7005 --protocol=tcp
+
 (docker) mysql -u root -p
 
 
@@ -25,7 +29,16 @@ update Characters set UserId = 1 where Id between 2 and 4;
 
 
 // listar usuarios de um banco de dados:
-	SELECT user FROM user;  
+	select USER from mysql.user; 
+	
+// Deletar Usuário
+	DROP USER 'tiago'@'host';
+	
+// criar um usuário, adicionar privilégios e mudar a senha
+	CREATE USER 'tiago'@'%' IDENTIFIED BY 'admin';
+	GRANT ALL PRIVILEGES ON * . * TO 'tiago'@'%';
+	ALTER USER 'tiago'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
+	
 	
 // rodar um sql script do cli do mysql:
-	source \home\user\Desktop\test.sql;
+	source /home/tiago/Desktop/angular_springboot/db-scripts/01-create-user.sql
