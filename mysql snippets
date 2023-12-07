@@ -76,8 +76,16 @@
 // Mudar tipo de Dado de uma coluna
 	ALTER TABLE Employees
 	MODIFY COLUMN BirthDate Datetime(6);
+	
+	
+	
+	
+// Criando FOREIGN KEY
+ FOREIGN KEY fk_id REFERENCES parent_table(parent_id) ON DELETE CASCADE ...
 
-
+ON DELETE CASCADE: Significa que se caso um registro da tabela 'pai' for deletado, todos os
+registro da tabela 'filho' que contém a referência desse registro como FOREIGN KEY será deletado
+também.
 
 
 
