@@ -1,9 +1,9 @@
 
 // login
 	(host) 
-	sudo mysql -u root -p -h 127.0.0.1 -P 7005 --protocol=tcp   (não usar "-h localhost" !!)
+	sudo mysql -u root -p -h 127.0.0.1 --protocol=tcp   (não usar "-h localhost" !!)
 	*após criar o usuário "tiago":
-	mysql -u tiago -p -h 127.0.0.1 -P 7005 --protocol=tcp
+	mysql -u tiago -p -h 127.0.0.1 --protocol=tcp
 
 (docker) mysql -u root -p 
 
@@ -77,16 +77,33 @@
 	ALTER TABLE Employees
 	MODIFY COLUMN BirthDate Datetime(6);
 	
+// Renomear Tabela
+	ALTER TABLE old_table_name RENAME new_table_name;
 	
 	
+	
+	
+// FOREIGN KEY
 	
 // Criando FOREIGN KEY
- FOREIGN KEY fk_id REFERENCES parent_table(parent_id) ON DELETE CASCADE ...
+	FOREIGN KEY (PersonID) REFERENCES Persons(PersonID) ON DELETE CASCADE, ...
+	
+// Criar FOREIGN KEY com um nome próprio:
+	CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID)
+    	REFERENCES Persons(PersonID) ON DELETE CASCADE, ...
 
 ON DELETE CASCADE: Significa que se caso um registro da tabela 'pai' for deletado, todos os
 registro da tabela 'filho' que contém a referência desse registro como FOREIGN KEY será deletado
 também.
 
+
+// Adicionar uma FOREIGN KEY em uma tabela:
+	
+	(coluna referenciada deve ter o MESMO TIPO da coluna refeência na tabela filho)
+	ALTER TABLE address ADD fk_client INT UNSIGNED NOT NULL;
+	
+	ALTER TABLE address
+	ADD FOREIGN KEY (fk_client_id) REFERENCES client(id); 
 
 
 
