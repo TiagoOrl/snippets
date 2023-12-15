@@ -24,8 +24,20 @@
 	);
 
 // inserir em uma table
-	INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)
-	VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+	INSERT INTO Customers (
+		CustomerName, ContactName, Address, City, PostalCode, Country
+	)
+	VALUES (
+		'Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway'
+	);
+
+// DELETAR de uma tabela:
+	DELETE FROM products WHERE product_id=1;
+	
+// UPDATE Registro
+UPDATE Customers
+SET ContactName = 'Alfred Schmidt', City = 'Frankfurt'
+WHERE CustomerID = 1;
 
 
 // mostrar schema de uma table
@@ -81,6 +93,31 @@
 	ALTER TABLE old_table_name RENAME new_table_name;
 	
 	
+// Renomear Coluna
+	ALTER TABLE table_name 
+	RENAME COLUMN old_column_name TO new_column_name;
+	
+	
+	
+	
+	
+	
+// JOIN
+	SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+	FROM Orders
+	INNER JOIN Customers ON Orders.CustomerID=Customers.CustomerID;
+	
+	
+// JOIN: Exemplo com Order, OrderProduct e "WHERE"
+
+	SELECT order_product.fk_order_id, order_product.amount , product.name, product.unit_price 
+	FROM order_product 
+	INNER JOIN product ON order_product.fk_product_id = product.id
+	WHERE order_product.fk_order_id = 3;
+	
+	
+	
+	
 	
 	
 // FOREIGN KEY
@@ -98,16 +135,20 @@ também.
 
 
 // Adicionar uma FOREIGN KEY em uma tabela:
-	
+	1.
 	(coluna referenciada deve ter o MESMO TIPO da coluna refeência na tabela filho)
-	ALTER TABLE address ADD fk_client INT UNSIGNED NOT NULL;
-	
+	ALTER TABLE address ADD fk_client_id INT UNSIGNED UNIQUE NOT NULL;
+	2.
 	ALTER TABLE address
 	ADD FOREIGN KEY (fk_client_id) REFERENCES client(id); 
 
 
 
 
+
+// Auto inicializar DATETIME:
+	`creation_time`     DATETIME DEFAULT CURRENT_TIMESTAMP,
+    	`modification_time` DATETIME ON UPDATE CURRENT_TIMESTAMP
 
 
 
