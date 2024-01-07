@@ -116,7 +116,25 @@ WHERE CustomerID = 1;
 	WHERE order_product.fk_order_id = 3;
 	
 	
+	//Exemplo 2
+	select client.first_name, client.second_name, address.city, address.country from client 
+	INNER JOIN address ON client.id = address.fk_client_id;
+
 	
+	
+// Funções agregadas
+	
+	// contagem de todos os registros:
+	SELECT COUNT(*) from product;
+	
+	// retornar o maior valor de uma coluna
+	select MAX(unit_price) from product;
+	
+// GROUP BY com JOIN
+	SELECT product_category.name,  count(product.id) AS numberOfProducts, fk_category_id FROM product 
+	INNER JOIN product_category ON product.fk_category_id = product_category.id 
+	GROUP BY product_category.name;
+
 	
 	
 	
