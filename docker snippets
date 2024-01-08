@@ -21,3 +21,7 @@ docker run --name mysql_instance -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin --cpu
 //postgreSQL
 docker run --name postgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=admin --cpus=1.5 -d postgres:bullseye
 
+//MongoDB
+docker run -d -p 27017:27017 -p 28017:28017 -e AUTH=no tutum/mongodb
+docker run --name mongodb_main -p 27017:27017 -e AUTH=no -d mongo:4.4.27-focal
+

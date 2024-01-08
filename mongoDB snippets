@@ -1,0 +1,31 @@
+
+// Criar collection
+	db.createCollection("usuarios");
+
+
+// INSERT
+	db.usuarios.insertOne({"name": "hello world"});
+	db.usuarios.insertOne({
+		nome: "Rafael Silva",
+		idade: 15
+	});
+	db.usuarios.insertMany([{}, {}]);
+	
+// SEARCH
+	db.usuarios.findOne({nome: "Tiago"});
+	
+	// Pagination
+	db.usuarios.find().limit(70);
+	
+	// Usando operadores
+	db.usuarios.find({ $and: [{idade: 27}, {nome: "Tiago Orlando de Jesus"}] });
+	
+	// Usando Condicionais
+	db.usuarios.find({ idade: {$gte: 30} });
+	
+// UPDATE
+	db.usuarios.findOneAndUpdate({}, {});
+	db.usuarios.findOneAndUpdate({nome: "Tiago"}, {$set:{ "nome": "Tiago Orlando de Jesus" } });
+
+// DELETE
+	db.usuarios.findOneAndDelete({name: "test"});
