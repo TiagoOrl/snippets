@@ -50,6 +50,36 @@ WHERE CustomerID = 1;
 
 // mostrar todas as tabelas
 	SHOW TABLES;
+	
+	
+// SELECT
+	
+	// LIKE: Buscar um item onde contem uma palavra em qualquer posição:
+		SELECT * FROM Customers
+		WHERE CustomerName LIKE '%tes%';
+		
+		
+		
+		
+// ORDER BY
+	
+	// Ordenar uma lista pelo nome de usuarios:
+	SELECT * FROM clients ORDER BY name ASC;
+	
+	
+	// Ordenar uma lista pela data de nascimento:
+	SELECT * FROM clients ORDER BY date_of_birth(DATE) DESC;
+	
+
+// SELECT ... BETWEEN
+	
+	// Selecionar uma lista baseada em um período de um campo DATE, com ORDER BY
+	select * from funcionario 
+	where nascimento BETWEEN '1990-01-01' AND '2000-01-01'
+	ORDER BY nascimento;
+		
+
+
 
 
 // atualizar um grupo de registros dentro de um "range"
@@ -167,6 +197,13 @@ também.
 // Auto inicializar DATETIME:
 	`creation_time`     DATETIME DEFAULT CURRENT_TIMESTAMP,
     	`modification_time` DATETIME ON UPDATE CURRENT_TIMESTAMP
+    	
+    	
+    	
+SELECT turma.*, turma_participante.* 
+FROM turma 
+INNER JOIN turma_participante ON turma.codigo = turma_participante.fk_turma_cod
+WHERE turma_participante.fk_funcionario_cod = 1 AND turma.fk_curso_cod = 1;
 
 
 
