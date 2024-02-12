@@ -25,3 +25,6 @@ docker run --name postgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=admin --cpus=1.5 
 docker run -d -p 27017:27017 -p 28017:28017 -e AUTH=no tutum/mongodb
 docker run --name mongodb_main -p 27017:27017 -e AUTH=no -d mongo:4.4.27-focal
 
+// REDIS 
+docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
+
