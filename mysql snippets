@@ -1,110 +1,20 @@
+DDL - Data Definition Language (CREATE, DROP, ALTER, TRUNCATE, COMMENT, RENAME)
 
-// login
-	(host) 
-	sudo mysql -u root -p -h 127.0.0.1 --protocol=tcp   (não usar "-h localhost" !!)
-	*após criar o usuário "tiago":
-	mysql -u tiago -p -h 127.0.0.1 --protocol=tcp
-
-(docker) mysql -u root -p 
-
-
-// mudar banco de dados
-	use database_name;
-
-// CRIAR uma tablela:
+// CRIAR uma tabela:
 	CREATE TABLE IF NOT EXISTS client (
 		id int UNSIGNED NOT NULL AUTO_INCREMENT,
 		first_name varchar(100) NOT NULL,
 		second_name varchar(200) NOT NULL,
 		country_id varchar(100) NOT NULL,
 		email varchar(100) NOT NULL,
-		created_at DATETIME(6) NOT NULL,
-		updated_at DATETIME(6) DEFAULT NULL,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		updated_at DATETIME DEFAULT NULL,
 		PRIMARY KEY (id)
 	);
 
-// inserir em uma table
-	INSERT INTO Customers (
-		CustomerName, ContactName, Address, City, PostalCode, Country
-	)
-	VALUES (
-		'Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway'
-	);
+// criar indices
+CREATE INDEX idx_nome_completo ON tPessoas(nome_completo);
 
-// DELETAR de uma tabela:
-	DELETE FROM products WHERE product_id=1;
-	
-// UPDATE Registro
-UPDATE Customers
-SET ContactName = 'Alfred Schmidt', City = 'Frankfurt'
-WHERE CustomerID = 1;
-
-
-// mostrar schema de uma table
-	describe table_name;
-
-
-// mostrar banco de dados:
-	SHOW DATABASES;
-
-
-// mostrar todas as tabelas
-	SHOW TABLES;
-	
-	
-// SELECT
-	
-	// LIKE: Buscar um item onde contem uma palavra em qualquer posição:
-		SELECT * FROM Customers
-		WHERE CustomerName LIKE '%tes%';
-		
-		
-		
-		
-// ORDER BY
-	
-	// Ordenar uma lista pelo nome de usuarios:
-	SELECT * FROM clients ORDER BY name ASC;
-	
-	
-	// Ordenar uma lista pela data de nascimento:
-	SELECT * FROM clients ORDER BY date_of_birth(DATE) DESC;
-	
-
-// SELECT ... BETWEEN
-	
-	// Selecionar uma lista baseada em um período de um campo DATE, com ORDER BY
-	select * from funcionario 
-	where nascimento BETWEEN '1990-01-01' AND '2000-01-01'
-	ORDER BY nascimento;
-		
-
-
-
-
-// atualizar um grupo de registros dentro de um "range"
-	update Characters set UserId = 1 where Id between 2 and 4;
-
-
-// listar usuarios de um banco de dados:
-	select USER from mysql.user; 
-	
-	
-// Deletar Usuário
-	DROP USER 'tiago'@'host';
-	
-	
-// criar um usuário, adicionar privilégios e mudar a senha
-	CREATE USER 'tiago'@'%' IDENTIFIED BY 'admin';
-	GRANT ALL PRIVILEGES ON * . * TO 'tiago'@'%';
-	ALTER USER 'tiago'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
-	
-	
-	
-// rodar um sql script do cli do mysql:
-	source /home/tiago/Desktop/angular_springboot/db-scripts/01-create-user.sql
-	
-	
 // ALTER TABLE
 
 // Add coluna na tabela:
@@ -117,7 +27,7 @@ WHERE CustomerID = 1;
 	
 // Mudar tipo de Dado de uma coluna
 	ALTER TABLE Employees
-	MODIFY COLUMN BirthDate Datetime(6);
+	MODIFY COLUMN BirthDate Datetime;
 	
 // Renomear Tabela
 	ALTER TABLE old_table_name RENAME new_table_name;
@@ -126,16 +36,93 @@ WHERE CustomerID = 1;
 // Renomear Coluna
 	ALTER TABLE table_name 
 	RENAME COLUMN old_column_name TO new_column_name;
+
+
+
+
+// FOREIGN KEY
+	
+// Criando FOREIGN KEY
+	FOREIGN KEY (PersonID) REFERENCES Persons(PersonID) ON DELETE CASCADE;
+	
+// Criar FOREIGN KEY com um nome próprio:
+	CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID)
+	REFERENCES Persons(PersonID) ON DELETE CASCADE, ...
+
+ON DELETE CASCADE: Significa que se caso um registro da tabela 'pai' for deletado, todos os
+registro da tabela 'filho' que contém a referência desse registro como FOREIGN KEY será deletado
+também.
+
+
+// Adicionar uma FOREIGN KEY em uma tabela:
+
+	1.
+	(coluna referenciada deve ter o MESMO TIPO da coluna referência na tabela filho)
+	ALTER TABLE address 
+    ADD fk_client_id INT UNSIGNED UNIQUE NOT NULL;
+
+	2.
+	ALTER TABLE address
+	ADD FOREIGN KEY (fk_client_id) REFERENCES client(id); 
+
+
+
+// Auto inicializar DATETIME:
+	`creation_time`     DATETIME DEFAULT CURRENT_TIMESTAMP,
+	`modification_time` DATETIME ON UPDATE CURRENT_TIMESTAMP
+
+
+
+
+
+
+
+
+------------------------------------
+
+
+DQL - Data Query Language = CONSULTA
+
+    
+    // USER: Consultar permissões de um usuário
+        select * from information_schema.user_privileges where grantee like "'user'%";
+
+    // USER: listar usuarios de um banco de dados:
+    	select USER from mysql.user; 
+
+// SELECT
+	
+	// LIKE: Buscar um item onde contem uma palavra em qualquer posição:
+		SELECT * FROM Customers
+		WHERE CustomerName LIKE '%tes%';
+		
+		
+		
+		
+// ORDER BY
+	
+	// Ordenar uma lista pelo nome de usuarios:
+	SELECT * FROM clients 
+    ORDER BY name ASC;
 	
 	
+	// Ordenar uma lista pela data de nascimento:
+	SELECT * FROM clients 
+    ORDER BY date_of_birth(DATE) DESC;
 	
+
+// SELECT ... BETWEEN
 	
-	
-	
+	// Selecionar uma lista baseada em um período de um campo DATE, com ORDER BY
+	SELECT * from funcionario 
+	WHERE nascimento BETWEEN '1990-01-01' AND '2000-01-01'
+	ORDER BY nascimento ASC;
+
+
 // JOIN
 	SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
 	FROM Orders
-	INNER JOIN Customers ON Orders.CustomerID=Customers.CustomerID;
+	INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
 	
 	
 // JOIN: Exemplo com Order, OrderProduct e "WHERE"
@@ -147,11 +134,39 @@ WHERE CustomerID = 1;
 	
 	
 	//Exemplo 2
+
 	select client.first_name, client.second_name, address.city, address.country from client 
 	INNER JOIN address ON client.id = address.fk_client_id;
 
-	
-	
+
+    // ex 3: juntar tabelas Product e ProductCategory
+
+    SELECT product_category.name, product.name, product.unit_price FROM product 
+    INNER JOIN product_category
+    WHERE product_category.id = product.fk_category_id;
+
+
+
+// GROUP BY
+  
+    SELECT COUNT(fk_category_id) AS 'quantidade de cada'
+    FROM product 
+    GROUP BY fk_category_id
+    ORDER BY COUNT(fk_category_id) DESC;
+
+
+    SELECT COUNT(*) AS 'quantidade de cada'
+    FROM product 
+    GROUP BY fk_category_id // agrupar os resultados pelo Id da categoria
+    ORDER BY COUNT(*) DESC;
+
+
+    SELECT COUNT(*) AS 'quantidade de cada', product_category.name AS 'categoria nome'
+    FROM product
+    INNER JOIN product_category ON product.fk_category_id = product_category.id
+    GROUP BY fk_category_id; // agrupar os resultados pelo Id da categoria
+
+
 // Funções agregadas
 	
 	// contagem de todos os registros:
@@ -160,50 +175,123 @@ WHERE CustomerID = 1;
 	// retornar o maior valor de uma coluna
 	select MAX(unit_price) from product;
 	
-// GROUP BY com JOIN
-	SELECT product_category.name,  count(product.id) AS numberOfProducts, fk_category_id FROM product 
-	INNER JOIN product_category ON product.fk_category_id = product_category.id 
-	GROUP BY product_category.name;
+
+
+
+
+
+
+
+
+----------------------------------------------------
+
+
+DML - Data Manipulation Language (INSERT, DELETE, UPDATE...) = MANIPULAÇÃO
+
+
+// inserir em uma table
+	INSERT INTO Customers (
+		CustomerName, ContactName, Address, City, PostalCode, Country
+	)
+	VALUES (
+		'Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway'
+	);
+
+// DELETAR de uma tabela:
+	DELETE FROM products WHERE product_id=1;
+	
+
+
+// UPDATE Registr/ Row
+
+    UPDATE Customers
+    SET ContactName = 'Alfred Schmidt', City = 'Frankfurt'
+    WHERE CustomerID = 1;
+
+
+
+// atualizar um grupo de registros dentro de um "range"
+	UPDATE Characters 
+    SET UserId = 1 
+    WHERE Id BETWEEN 2 AND 4;
+
+
+
+
+
+
+
+
+-------------------------------------------------
+
+
+DCL - Data Control Language (GRANT REVOKE) = USUÁRIOS
+
+
+// criar um usuário, adicionar privilégios e mudar a senha
+	CREATE USER 'tiago'@'%' IDENTIFIED BY 'admin';
+	GRANT ALL PRIVILEGES ON * . * TO 'tiago'@'%';
+	ALTER USER 'tiago'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
+
+
+// login
+	(host) 
+	sudo mysql -u root -p -h 127.0.0.1 --protocol=tcp   (não usar "-h localhost" !!)
+	*após criar o usuário "tiago":
+	mysql -u tiago -p -h 127.0.0.1 --protocol=tcp
+
+
+
+// Deletar Usuário
+	DROP USER 'tiago'@'host';
+
+
+
+-----------------------------------------------
+
+
+
+(docker) mysql -u root -p 
+
+
+
+
+// mudar banco de dados
+	USE database_name;
+
+
+// mostrar schema de uma table
+	DESCRIBE table_name;
+
+
+// mostrar banco de dados:
+	SHOW DATABASES;
+
+
+// mostrar todas as tabelas
+	SHOW TABLES;
+
+
+
+	
 
 	
 	
 	
-// FOREIGN KEY
 	
-// Criando FOREIGN KEY
-	FOREIGN KEY (PersonID) REFERENCES Persons(PersonID) ON DELETE CASCADE, ...
+// rodar um sql script do cli do mysql:
+	source /home/tiago/Desktop/angular_springboot/db-scripts/01-create-user.sql
 	
-// Criar FOREIGN KEY com um nome próprio:
-	CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID)
-    	REFERENCES Persons(PersonID) ON DELETE CASCADE, ...
 
-ON DELETE CASCADE: Significa que se caso um registro da tabela 'pai' for deletado, todos os
-registro da tabela 'filho' que contém a referência desse registro como FOREIGN KEY será deletado
-também.
+	
+	
 
 
-// Adicionar uma FOREIGN KEY em uma tabela:
-	1.
-	(coluna referenciada deve ter o MESMO TIPO da coluna refeência na tabela filho)
-	ALTER TABLE address ADD fk_client_id INT UNSIGNED UNIQUE NOT NULL;
-	2.
-	ALTER TABLE address
-	ADD FOREIGN KEY (fk_client_id) REFERENCES client(id); 
+	
 
 
-
-
-
-// Auto inicializar DATETIME:
-	`creation_time`     DATETIME DEFAULT CURRENT_TIMESTAMP,
-    	`modification_time` DATETIME ON UPDATE CURRENT_TIMESTAMP
     	
     	
-    	
-SELECT turma.*, turma_participante.* 
-FROM turma 
-INNER JOIN turma_participante ON turma.codigo = turma_participante.fk_turma_cod
-WHERE turma_participante.fk_funcionario_cod = 1 AND turma.fk_curso_cod = 1;
 
 
 
